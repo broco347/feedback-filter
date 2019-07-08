@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Feedback Classifier App</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="" name="keywords">
+  <meta content="" name="description">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Roboto:100,300,400,500,700|Philosopher:400,400i,700,700i" rel="stylesheet">
+
+  <!-- Bootstrap css -->
+  <!-- <link rel="stylesheet" href="css/bootstrap.css"> -->
+  <link href="static/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Libraries CSS Files -->
+  <link href="static/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+  <link href="static/lib/owlcarousel/assets/owl.theme.default.min.css" rel="stylesheet">
+  <link href="static/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+
+  <!-- Main Stylesheet File -->
+  <link href="static/css/style.css" rel="stylesheet">
+
+  <!-- =======================================================
+    Theme Name: eStartup
+    Theme URL: https://bootstrapmade.com/estartup-bootstrap-landing-page-template/
+    Author: BootstrapMade.com
+    License: https://bootstrapmade.com/license/
+  ======================================================= -->
+</head>
+
+<body>
+  <section id="hero" class="wow fadeIn">
+    <div class="hero-container">
+      <h1>Feedback Classifier</h1>
+      <h2>What are people saying about your product?</h2>
+      <img src="static/img/hero-img.png" alt="Hero Imgs">
+      <textarea class="text-left"
+        style="width:350px; height:200px;"
+        class="form-control"
+        id = "feedbackBox"
+        placeholder="Insert your feedback here...">
+      </textarea>
+      <div class="form-group">
+        <button id="submit">Submit</button>
+      </div>
+      <div class="text-left" style="display: none" id='the_result_div'>
+        results will go here
+      </div>
+    </div>
+  </section>
+</body>
+
+
+<script>
+  $('#submit').click( () => { processData(); } );
+    function processData(){
+      let feedback = $("#feedbackBox").val();
+      console.log(feedback);
+      $.ajax({
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        url: "/cluster",  // Replace with URL of POST handler
+        dataType: "json",
+        async: true,
+        data: JSON.stringify({feedback}),
+        success: (result) => {
+          console.log(result);
+          $("#the_result_div").empty();
+          for (let category in result) {
+            $("#the_result_div").append('<h2>' + category + '</h2>');
+            let sentences = result[category];
+            sentences.forEach((sentence) => {
+              // <div class="card" style="width: 18rem;">
+              //     <img class="card-img-top" src="..." alt="Card image cap">
+              //     <div class="card-body">
+              //         <p class="card-text"> sentence </p>
+              //     </div>
+              // </div>
+              $("#the_result_div").append(sentence + "<br/>");
+            })      
+        }
+        $('#the_result_div').show();
+      },
+      error: (result) => {
+      console.log(result);
+        alert('An error occurred. Refresh and try again.');
+      }
+      })
+    }
+</script>
+
+
+    <div class="copyrights">
+      <div class="container">
+        <div class="credits">
+          <!--
+            All the links in the footer should remain intact.
+            You can delete the links only if you purchased the pro version.
+            Licensing information: https://bootstrapmade.com/license/
+            Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=eStartup
+          -->
+          Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+        </div>
+      </div>
+    </div>
+
+  </footer>
+
+
+
+  <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+
+  <!-- JavaScript Libraries -->
+  <script src="../lib/jquery/jquery.min.js"></script>
+  <script src="../lib/jquery/jquery-migrate.min.js"></script>
+  <script src="../lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../lib/superfish/hoverIntent.js"></script>
+  <script src="../lib/superfish/superfish.min.js"></script>
+  <script src="../lib/easing/easing.min.js"></script>
+  <script src="../lib/owlcarousel/owl.carousel.min.js"></script>
+  <script src="../lib/wow/wow.min.js"></script>
+
+
+  <!-- Template Main Javascript File -->
+  <script src="../js/main.js"></script>
+
+</body>
+</html>
